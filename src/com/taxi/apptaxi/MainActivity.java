@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity{
 
-	LocationManager handle; // Gestor del servicio de localización BotonActivar
+	LocationManager handle; //  Gestor del servicio de localización BotonActivar
 	private boolean servicioActivo;
 
 	private Button botonActivar;
