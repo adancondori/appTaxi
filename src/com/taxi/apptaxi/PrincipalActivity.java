@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -49,11 +50,11 @@ public class PrincipalActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// Enviar_Web();
-				Intent intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				startActivity(intent);
-				finish();
+				Enviar_Web();
+				// Intent intent = new Intent(getApplicationContext(),
+				// MainActivity.class);
+				// startActivity(intent);
+				// finish();
 			}
 		});
 	}
@@ -77,11 +78,13 @@ public class PrincipalActivity extends Activity {
 			JSONObject object = function
 					.EnviarNro(textnro.getText().toString());
 			if (object != null) {
-				JSONObject json_user = object.getJSONObject("user");
-				String cad = json_user.getString("coduser");
-				if (cad != "") {
-					Toast.makeText(getApplicationContext(),
-							"Mensaje  = " + cad, Toast.LENGTH_LONG).show();
+				// JSONObject json_user = object.getJSONObject("user");
+				String success = object.getString("success");
+				String codigoactivacion = object.getString("codigoactivacion");
+				String codigouser = object.getString("codigouser");
+
+				if (success.toUpperCase().trim().equals("OK")) {
+					send_Sms(codigouser);
 					if (isActivado()) {
 						Intent intent = new Intent(getApplicationContext(),
 								MainActivity.class);
@@ -92,6 +95,9 @@ public class PrincipalActivity extends Activity {
 					Toast.makeText(getApplicationContext(),
 							"No se recivio mensaje ", Toast.LENGTH_LONG).show();
 				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"No se recivio mensaje ", Toast.LENGTH_LONG).show();
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -112,4 +118,9 @@ public class PrincipalActivity extends Activity {
 		return true;
 	}
 
+	public void send_Sms(String cod) {
+		SmsManager sms = SmsManager.getDefault();
+		sms.sendTextMessage("73975405", null, "appTaxi: codigo de activacion "
+				+ cod, null, null);
+	}
 }
