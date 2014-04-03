@@ -119,8 +119,11 @@ public class PrincipalActivity extends Activity {
 	}
 
 	public void send_Sms(String cod) {
-		SmsManager sms = SmsManager.getDefault();
-		sms.sendTextMessage("73975405", null, "appTaxi: codigo de activacion "
-				+ cod, null, null);
+		Toast.makeText(getApplicationContext(), "entro", Toast.LENGTH_SHORT)
+				.show();
+		// SmsManager sms = SmsManager.getDefault();
+		// sms.sendTextMessage("73975405", null,
+		// "appTaxi: codigo de activacion "
+		// + cod, null, null);
 	}
 }
