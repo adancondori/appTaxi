@@ -23,9 +23,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity {
 
-	LocationManager handle; //  Gestor del servicio de localización BotonActivar
+	LocationManager handle; // Gestor del servicio de localización BotonActivar
 	private boolean servicioActivo;
 
 	private Button botonActivar;
@@ -42,7 +42,7 @@ public class MainActivity extends Activity{
 			ActivarAlarma();
 		}
 		IU_compoentes();
-		gps.start();
+		// gps.start();
 	}
 
 	/**

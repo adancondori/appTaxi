@@ -5,12 +5,21 @@ import android.content.ContentValues;
 import com.taxi.db.MySQLiteHelper;
 
 public class User {
-
+	/**
+	 * dbluser
+	 */
+	public final static String _id = "id";
+	public final static String _nombre = "nombre";
+	public final static String _nrocelular = "nrocelular";
+	public final static String _registrado = "registrado";
+	public final static String _codigoactivacion = "codigoactivacion";
+	public final static String _codigosms = "codigosms";
+	public final static String _trabajo = "trabajo";
 	/**
 	 * dbluser
 	 */
 	public Integer id = -1;
-	public String nombre = "";
+	public String nombre = "appTaxi";
 	public String nrocelular = "";
 	public String registrado = "";
 	public String codigoactivacion = "";

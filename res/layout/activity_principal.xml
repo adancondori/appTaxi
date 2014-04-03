@@ -30,11 +30,13 @@
         android:text="@string/_enviar" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/txt_mensaje"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal|center_vertical"
         android:hint="@string/_numero"
         android:text="@string/_ingrese_nro"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -43,7 +45,7 @@
         android:id="@+id/textnro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/txt_mensaje"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:ems="10"

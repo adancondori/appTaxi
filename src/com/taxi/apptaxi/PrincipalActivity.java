@@ -7,6 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.taxi.controlador.Controller_User;
+import com.taxi.db.MyHelper;
+import com.taxi.db.MySQLiteHelper;
+import com.taxi.modelo.User;
 import com.taxi.util.ParserFunction;
 
 import android.os.Build;
@@ -21,13 +24,16 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 @SuppressLint("NewApi")
 public class PrincipalActivity extends Activity {
 	EditText textnro;
+	TextView mensaje;
 	Button buttonenviar;
+	MyHelper liteHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +44,38 @@ public class PrincipalActivity extends Activity {
 					.permitAll().build();
 			StrictMode.setThreadPolicy(policy);
 		}
+		liteHelper = new MyHelper();
+		// VERIFICA SI EXISTE EN LA BD
 		IU_iniciar();
+		if (liteHelper.user_is_envio_solicitud(getApplicationContext())) {
+			// VERIFICA SI ESA ACTIVADO
+			if (liteHelper.user_is_activado(getApplicationContext())) {
+				Intent intent = new Intent(getApplicationContext(),
+						MainActivity.class);
+				startActivity(intent);
+				finish();
+			} else {
+				desabilitar();
+			}
+		}
 
+	}
+
+	public void desabilitar() {
+		textnro.setVisibility(View.INVISIBLE);
+		mensaje.setText("Usted aun no esta activado por la central, por faver espere, esto puede demorar, hasta 24 horas");
+		buttonenviar.setVisibility(View.INVISIBLE);
 	}
 
 	private void IU_iniciar() {
 		textnro = (EditText) findViewById(R.id.textnro);
+		mensaje = (TextView) findViewById(R.id.txt_mensaje);
 		buttonenviar = (Button) findViewById(R.id.buttonenviar);
 		buttonenviar.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Enviar_Web();
-				// Intent intent = new Intent(getApplicationContext(),
-				// MainActivity.class);
-				// startActivity(intent);
-				// finish();
 			}
 		});
 	}
@@ -73,10 +94,10 @@ public class PrincipalActivity extends Activity {
 	 * 
 	 */
 	public void Enviar_Web() {
+		String tel = textnro.getText().toString();
 		ParserFunction function = new ParserFunction();
 		try {
-			JSONObject object = function
-					.EnviarNro(textnro.getText().toString());
+			JSONObject object = function.EnviarNro(tel);
 			if (object != null) {
 				// JSONObject json_user = object.getJSONObject("user");
 				String success = object.getString("success");
@@ -84,13 +105,17 @@ public class PrincipalActivity extends Activity {
 				String codigouser = object.getString("codigouser");
 
 				if (success.toUpperCase().trim().equals("OK")) {
-					send_Sms(codigouser);
-					if (isActivado()) {
-						Intent intent = new Intent(getApplicationContext(),
-								MainActivity.class);
-						startActivity(intent);
-						finish();
-					}
+					User user = new User();
+					user.setCodigoactivacion(codigoactivacion);
+					user.setCodigosms(codigouser);
+					user.setNrocelular(tel);
+					user.setRegistrado("NO");
+					user.setNombre("appTaxi:acc");
+					user.setTrabajo("0");
+					liteHelper.user_addUser(getApplicationContext(),
+							user.getContentvalues());
+					send_Sms(user.getCodigosms());
+					desabilitar();
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"No se recivio mensaje ", Toast.LENGTH_LONG).show();

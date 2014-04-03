@@ -37,19 +37,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String tbluser = "CREATE TABLE IF NOT EXISTS tbluser(" + id
-				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-				+ nombre + " TEXT, "
-				+ nrocelular + " TEXT, " 
-				+ registrado + " TEXT, "
-				+ codigoactivacion +" TEXT, " 
-				+ codigosms +" TEXT, " 
-				+ trabajo +" TEXT );";
-		String tblbacktrack = "CREATE TABLE IF NOT EXISTS tblbacktrack("
-				+ id +" INTEGER PRIMARY KEY, " 
-				+ latitud +" TEXT, " 
-				+ longitud +" TEXT, "
-				+ fecha + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+		String tbluser = "CREATE TABLE IF NOT EXISTS tbl_user(" + id
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + nombre + " TEXT, "
+				+ nrocelular + " TEXT, " + registrado + " TEXT, "
+				+ codigoactivacion + " TEXT, " + codigosms + " TEXT, "
+				+ trabajo + " TEXT );";
+		String tblbacktrack = "CREATE TABLE IF NOT EXISTS tbl_backtrack(" + id
+				+ " INTEGER PRIMARY KEY, " + latitud + " TEXT, " + longitud
+				+ " TEXT, " + fecha + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
 				+ enviado + " TEXT );";
 		db.execSQL(tbluser);
 		db.execSQL(tblbacktrack);
