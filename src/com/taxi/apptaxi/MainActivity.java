@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 			ActivarAlarma();
 		}
 		IU_compoentes();
-		// gps.start();
+		gps.start();
 	}
 
 	/**

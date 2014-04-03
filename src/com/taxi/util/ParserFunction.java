@@ -72,14 +72,15 @@ public class ParserFunction {
 		return json;
 	}
 
-	public JSONObject EnviarLatitudLongitud(String tel, String latitud,
-			String longitud, String estado) throws ClientProtocolException,
-			IOException, JSONException {
+	public JSONObject EnviarLatitudLongitud(String tel,
+			String codigoactivacion, String latitud, String longitud,
+			String estado) throws ClientProtocolException, IOException,
+			JSONException {
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("tag", "envioposicion"));
 		params.add(new BasicNameValuePair("tel", tel));
-		params.add(new BasicNameValuePair("codigoactivacion", tel));
+		params.add(new BasicNameValuePair("codigoactivacion", codigoactivacion));
 		params.add(new BasicNameValuePair("lat", latitud));
 		params.add(new BasicNameValuePair("long", longitud));
 		params.add(new BasicNameValuePair("tmp", Util.getdate(System

@@ -49,13 +49,44 @@ public class PrincipalActivity extends Activity {
 		IU_iniciar();
 		if (liteHelper.user_is_envio_solicitud(getApplicationContext())) {
 			// VERIFICA SI ESA ACTIVADO
-			if (liteHelper.user_is_activado(getApplicationContext())) {
+			User user = liteHelper.user_is_activado(getApplicationContext());
+			if (user.registrado.equals("OK")) {
+				// SI ESTA ACTIVADO IR A LA INTERFAZ PRINCIPAL
 				Intent intent = new Intent(getApplicationContext(),
 						MainActivity.class);
 				startActivity(intent);
 				finish();
 			} else {
-				desabilitar();
+				// SI NO ESTA VOLVER A ENVIAR ACTIVACION
+				ParserFunction function = new ParserFunction();
+				JSONObject jsonObject;
+				try {
+					jsonObject = function.estaactivado(user.getNrocelular(),
+							user.getCodigoactivacion());
+					if (jsonObject != null) {
+						String success = jsonObject.getString("success");
+						if (success.toUpperCase().trim().equals("OK")) {
+							user.setRegistrado("OK");
+							liteHelper.user_update(user.getId(),
+									user.getContentvalues(),
+									getApplicationContext());
+						} else {
+							desabilitar();
+						}
+					} else {
+						desabilitar();
+					}
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 		}
 
@@ -63,7 +94,7 @@ public class PrincipalActivity extends Activity {
 
 	public void desabilitar() {
 		textnro.setVisibility(View.INVISIBLE);
-		mensaje.setText("Usted aun no esta activado por la central, por faver espere, esto puede demorar, hasta 24 horas");
+		mensaje.setText("Usted aun no esta activado por la central, por favor espere, esto puede demorar hasta 24 horas");
 		buttonenviar.setVisibility(View.INVISIBLE);
 	}
 
@@ -78,16 +109,6 @@ public class PrincipalActivity extends Activity {
 				Enviar_Web();
 			}
 		});
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isActivado() {
-		Controller_User user = new Controller_User();
-
-		return true;
 	}
 
 	/**
@@ -114,7 +135,7 @@ public class PrincipalActivity extends Activity {
 					user.setTrabajo("0");
 					liteHelper.user_addUser(getApplicationContext(),
 							user.getContentvalues());
-					send_Sms(user.getCodigosms());
+					send_Sms(user.getCodigosms().trim());
 					desabilitar();
 				} else {
 					Toast.makeText(getApplicationContext(),

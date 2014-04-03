@@ -136,18 +136,24 @@ public class MyHelper {
 		addObject(TABLE_USER, values, context);
 	}
 
-	public Boolean user_is_activado(Context context) {
+	public User user_is_activado(Context context) {
 		String sql = "SELECT * FROM " + TABLE_USER + " LIMIT 1;";
+		User user = new User();
 		Cursor c = getObjects(sql, context);
 		if (c != null && c.getCount() != -1) {
 			c.moveToFirst();
-			String yes = c.getString(c.getColumnIndex(User._registrado));
-			if (yes.equals("OK")) {
-				return true;
-			}
+			user.setId(c.getInt(c.getColumnIndex(User._id)));
+			user.setCodigoactivacion(c.getString(c
+					.getColumnIndex(User._codigoactivacion)));
+			user.setCodigosms(c.getString(c.getColumnIndex(User._codigosms)));
+			user.setNombre(c.getString(c.getColumnIndex(User._nombre)));
+			user.setNrocelular(c.getString(c.getColumnIndex(User._nrocelular)));
+			user.setRegistrado(c.getString(c.getColumnIndex(User._registrado)));
+			user.setTrabajo(c.getString(c.getColumnIndex(User._trabajo)));
 			c.close();
+			return user;
 		}
-		return false;
+		return null;
 	}
 
 	public Boolean user_is_envio_solicitud(Context context) {
@@ -157,5 +163,9 @@ public class MyHelper {
 			return true;
 		}
 		return false;
+	}
+
+	public void user_update(int id, ContentValues values, Context context) {
+		updateObject(TABLE_USER, id, values, context);
 	}
 }

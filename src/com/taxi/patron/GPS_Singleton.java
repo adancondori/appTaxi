@@ -5,6 +5,11 @@ public class GPS_Singleton {
 	private static GPS_Singleton instance = new GPS_Singleton();
 	private double latitud = 0.0;
 	private double longitud = 0.0;
+	private int estado = ESTADO_LIBRE;
+
+	public static int ESTADO_LIBRE = 0;
+	public static int ESTADO_OCUPADO = 1;
+	public static int ESTADO_FUERA_DE_SERVICIO = 2;
 
 	private GPS_Singleton() {
 
@@ -48,4 +53,20 @@ public class GPS_Singleton {
 		this.longitud = longitud;
 	}
 
+	/**
+	 * @return the estado
+	 */
+	public int getEstado() {
+		return estado;
+	}
+
+	/**
+	 * @param estado
+	 *            the estado to set
+	 */
+	public void setEstado(int estado) {
+		this.estado = estado;
+	}
+	
+	
 }

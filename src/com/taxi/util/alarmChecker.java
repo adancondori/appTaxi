@@ -13,6 +13,7 @@ import com.taxi.apptaxi.MainActivity;
 import com.taxi.apptaxi.PrincipalActivity;
 import com.taxi.apptaxi.R;
 import com.taxi.db.MyHelper;
+import com.taxi.modelo.User;
 import com.taxi.patron.GPS_Singleton;
 import com.taxi.util.Rpc_send;
 
@@ -40,6 +41,7 @@ public class alarmChecker extends Service implements Runnable {
 
 	public static final int APP_ID_NOTIFICATION = 0;
 	private NotificationManager mManager;
+	private ParserFunction function = new ParserFunction();
 
 	/**
 	 *
@@ -63,9 +65,10 @@ public class alarmChecker extends Service implements Runnable {
 						+ ", Longitude = "
 						+ GPS_Singleton.getInstance().getLongitud();
 
-//				Toast.makeText(getApplicationContext(),
-//						"Enviando Dato al servidor: " + message, Toast.LENGTH_SHORT)
-//						.show();
+				// Toast.makeText(getApplicationContext(),
+				// "Enviando Dato al servidor: " + message, Toast.LENGTH_SHORT)
+				// .show();
+
 				enviarJson();
 			} else {
 				message = "Verifique su gps: AlarmaCheker";
@@ -75,60 +78,49 @@ public class alarmChecker extends Service implements Runnable {
 	};
 
 	public boolean enviarJson() {
-		Rpc_send rSend = new Rpc_send();
-		String latitud = String.valueOf(GPS_Singleton.getInstance()
-				.getLatitud());
-		String longitud = String.valueOf(GPS_Singleton.getInstance()
-				.getLongitud());
-		String time = String.valueOf(Util.getdate(System.currentTimeMillis()));
-		time = rSend.envio_server(latitud, longitud, time);
-		Toast.makeText(getApplicationContext(), "rpc " + time,
-				Toast.LENGTH_LONG).show();
-		// MyHelper helper = new MyHelper();
-		// Cursor cursor2 = helper.getObjects("select * from user ",
-		// getApplicationContext());
-
-		// String state1 = "";
-		// String state2 = "";
-		// if (cursor2 != null) {
-		// cursor2.moveToFirst();
-		// while (!cursor2.isAfterLast()) {
-		// state1 = cursor2.getString(cursor2.getColumnIndex("login"));
-		// state2 = cursor2.getString(cursor2.getColumnIndex("passw"));
-		// cursor2.moveToNext();
-		// }
-		// }
-		// cursor2.close();
-
-		// try {
-		// ParserFunction function;
-		// function = new ParserFunction();
-		// JSONObject object = function.EnviarLatitudLongitud(
-		// String.valueOf(GPS_Singleton.getInstance().getLatitud()),
-		// String.valueOf(GPS_Singleton.getInstance().getLongitud()));
-		// if (object != null) {
-		// JSONObject object2 = object.getJSONObject("gps");
-		// // System.out.println(cad);
-		// // String cadena[] = cad.split(":");
-		// // System.out.println(cadena[0] + "--" + cadena[1]);
-		// // if (Integer.valueOf(cadena[0]) > 0) {
-		// // return true;
-		// // }
-		// String cad = object2.getString("msg");
-		// Toast.makeText(getApplicationContext(), "Taxi: " + cad,
+		if (function != null) {
+			MyHelper liteHelper = new MyHelper();
+			User user = liteHelper.user_is_activado(getApplicationContext());
+			String latitud = String.valueOf(GPS_Singleton.getInstance()
+					.getLatitud());
+			String longitud = String.valueOf(GPS_Singleton.getInstance()
+					.getLongitud());
+			String estado = String.valueOf(GPS_Singleton.getInstance()
+					.getEstado());
+			try {
+				JSONObject object = function.EnviarLatitudLongitud(
+						user.getNrocelular(), user.getCodigoactivacion(),
+						latitud, longitud, estado);
+				String success = object.getString("success");
+				if (success.equals("OK")) {
+					Toast.makeText(getApplicationContext(),
+							"Enviado latitud y longitud", Toast.LENGTH_SHORT)
+							.show();
+				} else {
+					// encolar lat y long
+				}
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// *-- ENVIO CON RPC-----------------
+		// Rpc_send rSend = new Rpc_send();
+		// String latitud = String.valueOf(GPS_Singleton.getInstance()
+		// .getLatitud());
+		// String longitud = String.valueOf(GPS_Singleton.getInstance()
+		// .getLongitud());
+		// String time =
+		// String.valueOf(Util.getdate(System.currentTimeMillis()));
+		// time = rSend.envio_server(latitud, longitud, time);
+		// Toast.makeText(getApplicationContext(), "rpc " + time,
 		// Toast.LENGTH_LONG).show();
-		// }
-		//
-		// } catch (ClientProtocolException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (JSONException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 		return false;
 	}
 
@@ -153,7 +145,6 @@ public class alarmChecker extends Service implements Runnable {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		// TODO Auto-generated method stub
 		super.onStart(intent, startId);
 		// Toast.makeText(this, "MyAlarmService.onStart()",
 		// Toast.LENGTH_LONG).show();
