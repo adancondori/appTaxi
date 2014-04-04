@@ -70,6 +70,10 @@ public class PrincipalActivity extends Activity {
 							liteHelper.user_update(user.getId(),
 									user.getContentvalues(),
 									getApplicationContext());
+							Intent intent = new Intent(getApplicationContext(),
+									MainActivity.class);
+							startActivity(intent);
+							finish();
 						} else {
 							desabilitar();
 						}
@@ -167,9 +171,9 @@ public class PrincipalActivity extends Activity {
 	public void send_Sms(String cod) {
 		Toast.makeText(getApplicationContext(), "entro", Toast.LENGTH_SHORT)
 				.show();
-		// SmsManager sms = SmsManager.getDefault();
-		// sms.sendTextMessage("73975405", null,
-		// "appTaxi: codigo de activacion "
-		// + cod, null, null);
+		 SmsManager sms = SmsManager.getDefault();
+		 sms.sendTextMessage("73975405", null,
+		 "appTaxi: codigo de activacion "
+		 + cod, null, null);
 	}
 }

@@ -1,5 +1,7 @@
 package com.taxi.patron;
 
+import com.taxi.apptaxi.MainActivity;
+
 public class GPS_Singleton {
 
 	private static GPS_Singleton instance = new GPS_Singleton();
@@ -10,6 +12,7 @@ public class GPS_Singleton {
 	public static int ESTADO_LIBRE = 0;
 	public static int ESTADO_OCUPADO = 1;
 	public static int ESTADO_FUERA_DE_SERVICIO = 2;
+	private MainActivity activity;
 
 	private GPS_Singleton() {
 
@@ -67,6 +70,20 @@ public class GPS_Singleton {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
-	
+
+	/**
+	 * @return the activity
+	 */
+	public MainActivity getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @param activity
+	 *            the activity to set
+	 */
+	public void setActivity(MainActivity activity) {
+		this.activity = activity;
+	}
+
 }

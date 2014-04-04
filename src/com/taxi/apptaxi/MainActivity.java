@@ -3,6 +3,7 @@ package com.taxi.apptaxi;
 import java.util.Calendar;
 
 import com.taxi.gps.GPSManager;
+import com.taxi.patron.GPS_Singleton;
 import com.taxi.util.Util;
 import com.taxi.util.alarmChecker;
 
@@ -26,9 +27,11 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	LocationManager handle; // Gestor del servicio de localización BotonActivar
-	private boolean servicioActivo;
+	private boolean servicioActivo = true;
+	private boolean activo_fuera_servicio = true;
 
 	private Button botonActivar;
+	private Button btn_activo;
 	private static PendingIntent pendingIntent;
 	private int _tiempo_rango = 1000 * 10;
 	private GPSManager gps = new GPSManager(this);
@@ -41,8 +44,15 @@ public class MainActivity extends Activity {
 		if (pendingIntent == null) {
 			ActivarAlarma();
 		}
+		GPS_Singleton.getInstance().setActivity(this);
 		IU_compoentes();
 		gps.start();
+	}
+
+	public void cambiarEstado_ocupado() {
+		botonActivar.setBackgroundResource(R.color._red);
+		botonActivar.setText("Ocupado");
+		GPS_Singleton.getInstance().setEstado(GPS_Singleton.ESTADO_OCUPADO);
 	}
 
 	/**
@@ -50,20 +60,40 @@ public class MainActivity extends Activity {
 	 */
 	public void IU_compoentes() {
 		botonActivar = (Button) findViewById(R.id.BotonActivar);
+		btn_activo = (Button) findViewById(R.id.btn_activo);
 
 		servicioActivo = false;
 
 		botonActivar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				if (servicioActivo) {
-					servicioActivo = !servicioActivo;
+				if (GPS_Singleton.getInstance().getEstado() == GPS_Singleton.ESTADO_OCUPADO) {
 					botonActivar.setBackgroundResource(R.color._verde);
 					botonActivar.setText("Libre");
-				} else {
-					servicioActivo = !servicioActivo;
-					botonActivar.setBackgroundResource(R.color._red);
-					botonActivar.setText("Ocupado");
+					GPS_Singleton.getInstance().setEstado(
+							GPS_Singleton.ESTADO_LIBRE);
+					// comunicar estado al servicor
+					// 45
 				}
+			}
+		});
+		btn_activo.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+
+				if (GPS_Singleton.getInstance().getEstado() == GPS_Singleton.ESTADO_LIBRE) {
+					btn_activo.setBackgroundResource(R.color._otro);
+					btn_activo.setText("Fuera de Servicio");
+					GPS_Singleton.getInstance().setEstado(
+							GPS_Singleton.ESTADO_FUERA_DE_SERVICIO);
+				} else if (GPS_Singleton.getInstance().getEstado() == GPS_Singleton.ESTADO_FUERA_DE_SERVICIO) {
+					btn_activo.setBackgroundResource(R.color._otro2);
+					btn_activo.setText("Activo");
+					GPS_Singleton.getInstance().setEstado(
+							GPS_Singleton.ESTADO_LIBRE);
+					// comunicar estado al servicor
+					// 45
+				}
+
+				servicioActivo = !servicioActivo;
 			}
 		});
 	}

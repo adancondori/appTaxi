@@ -91,13 +91,14 @@ public class alarmChecker extends Service implements Runnable {
 				JSONObject object = function.EnviarLatitudLongitud(
 						user.getNrocelular(), user.getCodigoactivacion(),
 						latitud, longitud, estado);
-				String success = object.getString("success");
-				if (success.equals("OK")) {
+				String success = object.getString("peticion");
+				if (success.trim().equals("OK")) {
 					Toast.makeText(getApplicationContext(),
 							"Enviado latitud y longitud", Toast.LENGTH_SHORT)
 							.show();
-				} else {
-					// encolar lat y long
+					// recibo OK
+					GPS_Singleton.getInstance().getActivity()
+							.cambiarEstado_ocupado();
 				}
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block

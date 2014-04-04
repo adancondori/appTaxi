@@ -10,10 +10,14 @@
     <string name="_enviar">Enviar</string>
     <string name="_libre">Libre</string>
     <string name="_ocupado">Ocupado</string>
+    <string name="_activo">Activo</string>
+    <string name="_activo_fuera_servicio">Fuera de Servicio</string>
 
     <color name="_verde">#04E24B</color>
     <color name="_fondo">#2222CC19</color>
     <color name="_colordebordes">#a0a0a0</color>
     <color name="_red">#E32636</color>
+    <color name="_otro">#E32AD6</color>
+    <color name="_otro2">#E1AA16</color>
 
 </resources>

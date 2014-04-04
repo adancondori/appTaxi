@@ -13,12 +13,21 @@
         android:id="@+id/BotonActivar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_below="@+id/ImageView01"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:background="@color/_verde"
         android:text="@string/_libre" />
+
+    <Button
+        android:id="@+id/btn_activo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/BotonActivar"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@color/_otro2"
+        android:text="@string/_activo" />
 
     <ImageView
         android:id="@+id/ImageView01"

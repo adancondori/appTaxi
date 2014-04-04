@@ -72,12 +72,19 @@ public class Util {
 	}
 
 	public static String getdate(long now) {
-		DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm",
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
 				new Locale("es_ES"));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(now);
 		Date date = calendar.getTime();
 		return formatter.format(calendar.getTime());
+	}
+
+	private String getDateTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+		Date date = new Date();
+		return dateFormat.format(date);
 	}
 
 	/**

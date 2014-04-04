@@ -83,8 +83,9 @@ public class ParserFunction {
 		params.add(new BasicNameValuePair("codigoactivacion", codigoactivacion));
 		params.add(new BasicNameValuePair("lat", latitud));
 		params.add(new BasicNameValuePair("long", longitud));
-		params.add(new BasicNameValuePair("tmp", Util.getdate(System
-				.currentTimeMillis())));
+		String dat = Util.getdate(System.currentTimeMillis());
+		params.add(new BasicNameValuePair("tmp", dat));
+
 		params.add(new BasicNameValuePair("estado", estado));
 		JSONObject json = jsonParser.getJSONFromUrl(URL, params);
 		return json;

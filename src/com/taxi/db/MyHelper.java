@@ -52,7 +52,7 @@ public class MyHelper {
 		this.bd = (new MySQLiteHelper(context, "dbtaxi", null, 1))
 				.getWritableDatabase();
 
-		if ((bd.update(Class, values, "cod=" + id, null)) != -1) {
+		if ((bd.update(Class, values, "id=" + id, null)) != -1) {
 			// System.out.println(Class + " modificado(a)");
 		} else {
 			// System.out.println("Error al intentar modificar " + Class);
