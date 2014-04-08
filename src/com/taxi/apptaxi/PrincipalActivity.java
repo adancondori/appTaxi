@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.View;
@@ -49,6 +50,7 @@ public class PrincipalActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_principal);
 		if (android.os.Build.VERSION.SDK_INT > 9) {
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -96,13 +98,14 @@ public class PrincipalActivity extends Activity {
 					// desabilitar();
 					return "NO";
 				}
-				return "OK";
+				return "ERROR";
 			} else {
 				// desabilitar();
-				return "NO";
+				return "ERROR";
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -111,7 +114,7 @@ public class PrincipalActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "NO";
+		return "ERROR";
 	}
 
 	public void desabilitar() {
@@ -189,8 +192,8 @@ public class PrincipalActivity extends Activity {
 	}
 
 	public void send_Sms(String cod) {
-		// Toast.makeText(getApplicationContext(), "entro", Toast.LENGTH_SHORT)
-		// .show();
+//		Toast.makeText(getApplicationContext(), "entro", Toast.LENGTH_SHORT)
+//				.show();
 		// SmsManager sms = SmsManager.getDefault();
 		// sms.sendTextMessage("73975405", null,
 		// "appTaxi: codigo de activacion "
@@ -246,23 +249,27 @@ public class PrincipalActivity extends Activity {
 				}
 
 			} else {
-				desabilitar();
 				progressDialog.dismiss();
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						PrincipalActivity.this);
-				builder.setMessage(
-						"Su conexión a internet demora demasiado, revise su conexión.")
-						.setTitle("Advertencia")
-						.setCancelable(false)
-						.setNeutralButton("Aceptar",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.cancel();
-									}
-								});
-				AlertDialog alert = builder.create();
-				alert.show();
+				if (result.equals("NO")) {
+					desabilitar();
+				} else {		
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							PrincipalActivity.this);
+					builder.setMessage(
+							"Su conexión a internet demora demasiado, revise su conexión.")
+							.setTitle("Advertencia")
+							.setCancelable(false)
+							.setNeutralButton("Aceptar",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog, int id) {
+											dialog.cancel();
+										}
+									});
+					AlertDialog alert = builder.create();
+					alert.show();
+
+				}
 			}
 		}
 	}

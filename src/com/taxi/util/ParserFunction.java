@@ -27,7 +27,7 @@ public class ParserFunction {
 	private JSONParser jsonParser;
 
 	// private String URL = "http://192.168.4.1/proyecto/moviltaxi.php";
-	// private String URL = "http://192.168.4.1/index/enviar";
+	// private String URL = "http://192.168.4.1/index/enviar"; 
 	private String URL = "http://www.taxidirector.com/movil.php";
 
 	/**
